@@ -337,7 +337,7 @@ function syncOrder(el,quadrant){const ids=[...el.querySelectorAll('[data-id],[da
 function initSortable(listId,quadrant){if(sortables[listId])sortables[listId].destroy();const el=document.getElementById(listId);if(!el)return;sortables[listId]=Sortable.create(el,{handle:'.drag-handle',animation:150,ghostClass:'sortable-ghost',chosenClass:'sortable-chosen',onEnd(){syncOrder(el,quadrant);}});}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function emptyMsg(msg){return'<div style="text-align:center;color:#2e3d5a;font-size:.82rem;padding:1.5rem;">'+msg+'</div>';}
-function tbRow(t){const isRunning=activeTimer&&activeTimer.id===t.id;const cdVal=isRunning?fmtTime(activeTimer.remaining):'';const mins=t.tbMins||'';return'<div class="tb-row"><span class="tb-label-txt">⏱ Time box</span><input class="tb-input" type="number" min="1" max="240" placeholder="min" value="'+mins+'" id="tb-inp-'+t.id+'" onchange="setTbMins('+t.id+',this.value)"/><span class="tb-unit">min</span>'+(isRunning?'<span class="tb-countdown'+(activeTimer.remaining<=60?' urgent':'')+'" id="tb-cd-'+t.id+'">'+cdVal+'</span><button class="tb-stop" onclick="stopTimer()">⏹ Stop</button>':'<button class="tb-start" onclick="startTimer('+t.id+')">▶ Lancer</button>')+'</div>';}
+function tbRow(t){const isRunning=activeTimer&&activeTimer.id===t.id;const cdVal=isRunning?fmtTime(activeTimer.remaining):'';const mins=t.tbMins||'';return'<div class="tb-row"><span class="tb-label-txt">⏱ Temps alloué</span><input class="tb-input" type="number" min="1" max="240" placeholder="min" value="'+mins+'" id="tb-inp-'+t.id+'" onchange="setTbMins('+t.id+',this.value)"/><span class="tb-unit">min</span>'+(isRunning?'<span class="tb-countdown'+(activeTimer.remaining<=60?' urgent':'')+'" id="tb-cd-'+t.id+'">'+cdVal+'</span><button class="tb-stop" onclick="stopTimer()">⏹ Stop</button>':'<button class="tb-start" onclick="startTimer('+t.id+')">▶ Lancer</button>')+'</div>';}
 function dlRow(t){const badge=deadlineBadge(t.deadline);return'<div class="dl-row"><span class="dl-label-txt">📆 Au plus tard</span><input class="dl-input" type="date" value="'+(t.deadline||'')+'" id="dl-inp-'+t.id+'" onchange="setDeadline('+t.id+',this.value)"/>'+(badge?badge:'')+'</div>';}
 function quadrantTaskRow(t){return'<div class="task-row" data-id="'+t.id+'"><span class="drag-handle">⠿</span><div class="big-check" onclick="markDone('+t.id+')" title="Réalisée"></div><span class="task-name">'+esc(t.text)+'</span><span class="status-badge">'+QLABELS[t.quadrant]+'</span><button class="btn-icon" onclick="openEdit('+t.id+')" title="Modifier">✏️</button><button class="btn-icon btn-del" onclick="removeTask('+t.id+')" title="Supprimer">✕</button></div>'+tbRow(t)+dlRow(t);}
 function allTaskRow(t){const qc=QCOLORS[t.quadrant];return'<div style="border-left:4px solid '+qc+';border-bottom:1px solid #1e2d4a;"><div class="task-row" data-id="'+t.id+'" style="border-bottom:none;"><div class="big-check" onclick="markDone('+t.id+')" title="Réalisée"></div><span class="task-name">'+esc(t.text)+'</span><select class="all-q-select" onchange="changeQ('+t.id+',this.value)" style="color:'+qc+';border-color:'+qc+'55;"><option value="do"'+(t.quadrant==='do'?'selected':'')+'>✅ Urgent & Imp.</option><option value="plan"'+(t.quadrant==='plan'?'selected':'')+'>📅 Imp. pas urgent</option><option value="delegate"'+(t.quadrant==='delegate'?'selected':'')+'>👤 Urgent pas imp.</option><option value="eliminate"'+(t.quadrant==='eliminate'?'selected':'')+'>🗑️ Ni urgent ni imp.</option></select><button class="btn-icon" onclick="openEdit('+t.id+')" title="Modifier">✏️</button><button class="btn-icon btn-del" onclick="removeTask('+t.id+')" title="Supprimer">✕</button></div>'+tbRow(t)+dlRow(t)+'</div>';}
@@ -375,13 +375,14 @@ load();render();
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/Eisenhower_PWA/sw.js")
+    navigator.serviceWorker.register("/Eisenhower_PWA/sw.js", {updateViaCache: 'none'})
       .then(reg => {
         reg.addEventListener("updatefound", () => {
           const newSW = reg.installing;
           newSW.addEventListener("statechange", () => {
             if (newSW.state === "installed" && navigator.serviceWorker.controller) {
               document.getElementById("update-banner").style.display = "block";
+              document.getElementById("update-banner").firstElementChild.style.display = "flex";
             }
           });
         });

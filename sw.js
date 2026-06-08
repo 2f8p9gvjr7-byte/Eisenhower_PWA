@@ -1,4 +1,4 @@
-const CACHE = 'eisenhower-v6';
+const CACHE = 'eisenhower-v10';
 const ASSETS = [
   '/Eisenhower_PWA/',
   '/Eisenhower_PWA/index.html',
@@ -9,7 +9,6 @@ const ASSETS = [
 ];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-  self.skipWaiting();
 });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys =>
