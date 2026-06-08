@@ -469,7 +469,7 @@ function tbRow(t) {
   const cdVal = isRunning ? fmtTime(activeTimer.remaining) : '';
   const mins = t.tbMins || '';
   return '<div class="tb-row">' +
-    '<span class="tb-label-txt">⏱ Time box</span>' +
+    '<span class="tb-label-txt">⏱ Temps alloué</span>' +
     '<input class="tb-input" type="number" min="1" max="240" placeholder="min" value="' + mins + '" id="tb-inp-' + t.id + '" onchange="setTbMins(' + t.id + ',this.value)"/>' +
     '<span class="tb-unit">min</span>' +
     (isRunning
