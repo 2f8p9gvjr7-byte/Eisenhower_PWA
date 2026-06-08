@@ -4,16 +4,12 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
   <title>Matrice d'Eisenhower</title>
-
-  <!-- ═══ PWA ═══ -->
   <link rel="manifest" href="manifest.json"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="Eisenhower"/>
   <link rel="apple-touch-icon" href="icon-192.png"/>
-  <meta name="theme-color" content="#FF6600"/>
-  <!-- ════════════ -->
-
+  <meta name="theme-color" content="#4A6FA5"/>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
@@ -53,7 +49,7 @@
     .btn-icon{background:none;border:none;cursor:pointer;font-size:.85rem;padding:4px;border-radius:5px;flex-shrink:0;}
     .btn-icon:hover{background:#2e3d5a;}
     .btn-del{color:#e05c7a !important;}
-    .tb-row{display:flex;align-items:center;gap:8px;padding:4px 1rem 12px;background:#151e30;}
+    .tb-row{display:flex;align-items:center;gap:8px;padding:4px 1rem 6px;background:#151e30;}
     .tb-label-txt{font-size:.7rem;color:#f5a623;font-weight:700;white-space:nowrap;}
     .tb-input{width:54px;background:#0d1321;border:1px solid #2e3d5a;border-radius:7px;padding:5px 7px;font-size:.82rem;color:#e8f0f8;outline:none;text-align:center;}
     .tb-input:focus{border-color:#f5a623;}
@@ -63,6 +59,14 @@
     .tb-countdown{font-size:.88rem;font-weight:800;color:#f5a623;min-width:44px;text-align:center;font-variant-numeric:tabular-nums;}
     .tb-countdown.urgent{color:#e05c7a;animation:pulse .8s infinite;}
     @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+    .dl-row{display:flex;align-items:center;gap:8px;padding:4px 1rem 10px;background:#151e30;border-bottom:1px solid #1e2d4a;}
+    .dl-label-txt{font-size:.7rem;color:#3dbfa8;font-weight:700;white-space:nowrap;}
+    .dl-input{background:#0d1321;border:1px solid #2e3d5a;border-radius:7px;padding:5px 8px;font-size:.78rem;color:#e8f0f8;outline:none;flex:1;max-width:160px;}
+    .dl-input:focus{border-color:#3dbfa8;}
+    .dl-badge{font-size:.68rem;font-weight:700;border-radius:99px;padding:2px 9px;white-space:nowrap;}
+    .dl-badge.ok{background:#0d2a1f;color:#3dbfa8;border:1px solid #3dbfa820;}
+    .dl-badge.soon{background:#251d08;color:#f5a623;border:1px solid #f5a62320;}
+    .dl-badge.late{background:#2a1020;color:#e05c7a;border:1px solid #e05c7a20;}
     .all-q-select{background:#2a3550;border-radius:7px;padding:4px 6px;font-size:.62rem;font-weight:700;cursor:pointer;flex-shrink:0;max-width:130px;border:1px solid #3a4868;color:#f5a623;}
     .add-form{margin:1rem;background:#1a2540;border-radius:16px;border:1px solid #2e3d5a;padding:1.2rem;}
     .add-form-title{font-size:.7rem;color:#f5a623;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.9rem;}
@@ -110,8 +114,8 @@
     .modal-overlay.open{display:flex;}
     .modal{background:#1a2540;border:1px solid #f5a623;border-radius:16px;padding:1.4rem;width:100%;max-width:480px;}
     .modal h3{color:#f5a623;font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;}
-    .modal input{width:100%;background:#0d1321;border:1px solid #2e3d5a;border-radius:10px;padding:12px 14px;font-size:.95rem;color:#e8f0f8;outline:none;margin-bottom:.9rem;}
-    .modal input:focus{border-color:#f5a623;}
+    .modal input[type=text]{width:100%;background:#0d1321;border:1px solid #2e3d5a;border-radius:10px;padding:12px 14px;font-size:.95rem;color:#e8f0f8;outline:none;margin-bottom:.9rem;}
+    .modal input[type=text]:focus{border-color:#f5a623;}
     .modal-btns{display:flex;gap:8px;margin-top:.5rem;}
     .btn-modal-save{flex:1;background:#f5a623;color:#0d1321;border:none;border-radius:10px;padding:12px;font-size:.9rem;font-weight:800;cursor:pointer;}
     .btn-modal-cancel{flex:1;background:none;border:1px solid #2e3d5a;border-radius:10px;padding:12px;font-size:.9rem;color:#6a7fa0;cursor:pointer;}
@@ -130,7 +134,7 @@
     .binary-btns{display:flex;gap:8px;}
     .bin-btn{flex:1;padding:10px;border-radius:9px;border:2px solid #2e3d5a;background:#1a2540;font-size:.9rem;font-weight:800;cursor:pointer;letter-spacing:.05em;transition:all .15s;color:#6a7fa0;}
     .bin-btn.active.bin-yes{background:#27ae60;border-color:#27ae60;color:#fff;}
-    .bin-btn.active.bin-no {background:#e05c7a;border-color:#e05c7a;color:#fff;}
+    .bin-btn.active.bin-no{background:#e05c7a;border-color:#e05c7a;color:#fff;}
     .bin-btn:not(.active):hover{border-color:#f5a623;color:#f5a623;}
     .binary-result{display:flex;align-items:center;gap:10px;margin-top:4px;}
     .binary-result-arrow{font-size:1.4rem;color:#f5a623;font-weight:800;}
@@ -138,16 +142,33 @@
     .binary-result-label{font-size:1rem;font-weight:800;letter-spacing:.04em;}
     .binary-result-desc{font-size:.72rem;color:#9aacc2;margin-top:3px;}
     select option{background:#0d1321;color:#c5d3e3;}
+    .cd-wrap{padding:1rem;display:flex;flex-direction:column;gap:10px;}
+    .cd-title{font-size:.65rem;color:#6a7fa0;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .2rem .2rem;font-weight:700;}
+    .cd-card{border-radius:14px;overflow:hidden;display:flex;align-items:stretch;min-height:70px;}
+    .cd-card-left{flex:1;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;gap:3px;}
+    .cd-card-name{font-size:1rem;font-weight:800;color:#fff;line-height:1.2;}
+    .cd-card-date{font-size:.72rem;color:rgba(255,255,255,.65);margin-top:2px;}
+    .cd-card-right{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;min-width:80px;}
+    .cd-card-num{font-size:2.4rem;font-weight:900;color:#fff;line-height:1;letter-spacing:-.03em;}
+    .cd-card-unit{font-size:.65rem;color:rgba(255,255,255,.7);font-weight:700;text-transform:uppercase;letter-spacing:.08em;}
+    .cd-card.cd-ok{background:linear-gradient(135deg,#1a6b4a,#27ae60);}
+    .cd-card.cd-soon{background:linear-gradient(135deg,#7a4a00,#f5a623);}
+    .cd-card.cd-urgent{background:linear-gradient(135deg,#7a1a2a,#e05c7a);}
+    .cd-card.cd-late{background:linear-gradient(135deg,#3a0a15,#c0392b);}
+    .cd-card.cd-today{background:linear-gradient(135deg,#6a1a00,#e05c7a);}
+    .cd-empty{text-align:center;color:#2e3d5a;font-size:.88rem;padding:3rem 1rem;line-height:1.8;}
   </style>
 </head>
 <body>
 
-<div id="update-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#FF6600;color:#fff;padding:14px 16px;z-index:9999;font-family:-apple-system,sans-serif;">
+<div id="update-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#4A6FA5;color:#fff;padding:14px 16px;z-index:9999;">
 <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-  <span style="font-size:.85rem;">🔄 Nouvelle version disponible !</span>
-  <button onclick="doUpdate()" style="background:#fff;color:#FF6600;border:none;border-radius:8px;padding:8px 16px;font-size:.82rem;font-weight:700;cursor:pointer;">Mettre à jour</button>
+  <span style="font-size:.85rem;font-weight:700;">🔄 Nouvelle version disponible !</span>
+  <button onclick="doUpdate()" style="background:#fff;color:#4A6FA5;border:none;border-radius:8px;padding:8px 16px;font-size:.82rem;font-weight:700;cursor:pointer;">Mettre à jour</button>
   <button onclick="document.getElementById('update-banner').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.7);font-size:1.1rem;cursor:pointer;">✕</button>
-</div></div>
+</div>
+</div>
+
 <div class="save-badge" id="save-badge">✓ Sauvegardé</div>
 <div class="toast" id="toast"></div>
 
@@ -156,7 +177,7 @@
     <div><div class="app-title">EISENHOWER</div><div class="app-sub">Matrice de priorisation</div></div>
     <div class="header-btns">
       <button class="btn-reset" id="btn-reset">🗑 Reset</button>
-      <button class="btn-new"   id="btn-new">↺ Nouveau</button>
+      <button class="btn-new" id="btn-new">↺ Nouveau</button>
     </div>
   </div>
 </div>
@@ -167,16 +188,16 @@
 </div>
 
 <div class="tabs-wrap">
-  <button class="tab-btn active" id="tab-saisie"   >📝 Saisie</button>
-  <button class="tab-btn"        id="tab-toutes"   >📋 Toutes <span class="tab-badge" id="tb-all">0</span></button>
-  <button class="tab-btn"        id="tab-faire"    >✅ Faire <span class="tab-badge" id="tb-do">0</span></button>
-  <button class="tab-btn"        id="tab-planifier">📅 Planifier <span class="tab-badge" id="tb-plan">0</span></button>
-  <button class="tab-btn"        id="tab-deleguer" >👤 Déléguer <span class="tab-badge" id="tb-delegate">0</span></button>
-  <button class="tab-btn"        id="tab-eliminer" >🗑 Éliminer <span class="tab-badge" id="tb-eliminate">0</span></button>
-  <button class="tab-btn"        id="tab-matrix"   >⊞ Matrice</button>
+  <button class="tab-btn active" id="tab-saisie">📝 Saisie</button>
+  <button class="tab-btn" id="tab-toutes">📋 Toutes <span class="tab-badge" id="tb-all">0</span></button>
+  <button class="tab-btn" id="tab-faire">✅ Faire <span class="tab-badge" id="tb-do">0</span></button>
+  <button class="tab-btn" id="tab-planifier">📅 Planifier <span class="tab-badge" id="tb-plan">0</span></button>
+  <button class="tab-btn" id="tab-deleguer">👤 Déléguer <span class="tab-badge" id="tb-delegate">0</span></button>
+  <button class="tab-btn" id="tab-eliminer">🗑 Éliminer <span class="tab-badge" id="tb-eliminate">0</span></button>
+  <button class="tab-btn" id="tab-matrix">⊞ Matrice</button>
+  <button class="tab-btn" id="tab-countdown">⏳ Échéances <span class="tab-badge" id="tb-countdown">0</span></button>
 </div>
 
-<!-- SAISIE -->
 <div class="view-section active" id="vs-saisie">
   <div class="add-form">
     <div class="add-form-title">📋 Ajouter une tâche</div>
@@ -185,18 +206,18 @@
       <div class="binary-question">
         <div class="binary-label">⚡ Cette tâche est-elle <strong>urgente</strong> ?<br><span class="binary-hint">Doit-elle être faite très rapidement ?</span></div>
         <div class="binary-btns">
-          <button class="bin-btn bin-yes active" id="bin-urgent-yes" data-q="urgent" data-v="yes">OUI</button>
-          <button class="bin-btn bin-no"         id="bin-urgent-no"  data-q="urgent" data-v="no" >NON</button>
+          <button class="bin-btn bin-yes active" data-q="urgent" data-v="yes">OUI</button>
+          <button class="bin-btn bin-no" data-q="urgent" data-v="no">NON</button>
         </div>
       </div>
       <div class="binary-question">
         <div class="binary-label">🎯 Cette tâche est-elle <strong>importante</strong> ?<br><span class="binary-hint">Contribue-t-elle à vos objectifs essentiels ?</span></div>
         <div class="binary-btns">
-          <button class="bin-btn bin-yes active" id="bin-important-yes" data-q="important" data-v="yes">OUI</button>
-          <button class="bin-btn bin-no"         id="bin-important-no"  data-q="important" data-v="no" >NON</button>
+          <button class="bin-btn bin-yes active" data-q="important" data-v="yes">OUI</button>
+          <button class="bin-btn bin-no" data-q="important" data-v="no">NON</button>
         </div>
       </div>
-      <div class="binary-result" id="binary-result">
+      <div class="binary-result">
         <div class="binary-result-arrow">→</div>
         <div id="binary-result-content" class="binary-result-box" style="border-color:#e05c7a;background:#2a1020;">
           <div class="binary-result-label" style="color:#e05c7a;">✅ FAIRE</div>
@@ -209,19 +230,14 @@
   <div class="app-footer">📱 Installable sur iPhone · Stocké localement · Fonctionne hors-ligne</div>
 </div>
 
-<!-- TOUTES -->
 <div class="view-section" id="vs-toutes">
   <div class="section-panel">
-    <div class="section-header">
-      <div class="section-title" style="color:#f5a623;">📋 TOUTES LES TÂCHES</div>
-      <div class="section-count" id="sc-all">0 tâche</div>
-    </div>
+    <div class="section-header"><div class="section-title" style="color:#f5a623;">📋 TOUTES LES TÂCHES</div><div class="section-count" id="sc-all">0 tâche</div></div>
     <div id="list-all"></div>
   </div>
   <div class="bottom-actions"><button class="btn-outline-orange" id="btn-add-from-all">+ Ajouter une tâche</button></div>
 </div>
 
-<!-- FAIRE -->
 <div class="view-section" id="vs-faire">
   <div class="section-panel col-do">
     <div class="section-header"><div class="section-title">✅ FAIRE</div><div class="section-count" id="sc-do">0 tâche</div></div>
@@ -230,7 +246,6 @@
   <div class="bottom-actions"><button class="btn-outline-orange" id="btn-add-from-do">+ Ajouter une tâche</button></div>
 </div>
 
-<!-- PLANIFIER -->
 <div class="view-section" id="vs-planifier">
   <div class="section-panel col-plan">
     <div class="section-header"><div class="section-title">📅 PLANIFIER</div><div class="section-count" id="sc-plan">0 tâche</div></div>
@@ -239,7 +254,6 @@
   <div class="bottom-actions"><button class="btn-outline-orange" id="btn-add-from-plan">+ Ajouter une tâche</button></div>
 </div>
 
-<!-- DÉLÉGUER -->
 <div class="view-section" id="vs-deleguer">
   <div class="section-panel col-delegate">
     <div class="section-header"><div class="section-title">👤 DÉLÉGUER</div><div class="section-count" id="sc-delegate">0 tâche</div></div>
@@ -248,7 +262,6 @@
   <div class="bottom-actions"><button class="btn-outline-orange" id="btn-add-from-delegate">+ Ajouter une tâche</button></div>
 </div>
 
-<!-- ÉLIMINER -->
 <div class="view-section" id="vs-eliminer">
   <div class="section-panel col-eliminate">
     <div class="section-header"><div class="section-title">🗑️ ÉLIMINER</div><div class="section-count" id="sc-eliminate">0 tâche</div></div>
@@ -257,49 +270,36 @@
   <div class="bottom-actions"><button class="btn-outline-orange" id="btn-add-from-eliminate">+ Ajouter une tâche</button></div>
 </div>
 
-<!-- MATRICE -->
 <div class="view-section" id="vs-matrix">
   <div class="mat-axis-h">← PAS URGENT · URGENCE · URGENT →</div>
   <div class="matrix-wrap">
-    <div class="mat-quad q-do">
-      <div class="mat-header"><span class="mat-emoji">✅</span><div><div class="mat-title">FAIRE</div><div class="mat-sub">Urgent · Important</div></div><span class="mat-badge" id="mb-do">0</span></div>
-      <div class="mat-tasks" id="mt-do"></div>
-    </div>
-    <div class="mat-quad q-plan">
-      <div class="mat-header"><span class="mat-emoji">📅</span><div><div class="mat-title">PLANIFIER</div><div class="mat-sub">Important · Pas urgent</div></div><span class="mat-badge" id="mb-plan">0</span></div>
-      <div class="mat-tasks" id="mt-plan"></div>
-    </div>
-    <div class="mat-quad q-delegate">
-      <div class="mat-header"><span class="mat-emoji">👤</span><div><div class="mat-title">DÉLÉGUER</div><div class="mat-sub">Urgent · Pas important</div></div><span class="mat-badge" id="mb-delegate">0</span></div>
-      <div class="mat-tasks" id="mt-delegate"></div>
-    </div>
-    <div class="mat-quad q-eliminate">
-      <div class="mat-header"><span class="mat-emoji">🗑️</span><div><div class="mat-title">ÉLIMINER</div><div class="mat-sub">Pas urgent · Pas important</div></div><span class="mat-badge" id="mb-eliminate">0</span></div>
-      <div class="mat-tasks" id="mt-eliminate"></div>
-    </div>
+    <div class="mat-quad q-do"><div class="mat-header"><span class="mat-emoji">✅</span><div><div class="mat-title">FAIRE</div><div class="mat-sub">Urgent · Important</div></div><span class="mat-badge" id="mb-do">0</span></div><div class="mat-tasks" id="mt-do"></div></div>
+    <div class="mat-quad q-plan"><div class="mat-header"><span class="mat-emoji">📅</span><div><div class="mat-title">PLANIFIER</div><div class="mat-sub">Important · Pas urgent</div></div><span class="mat-badge" id="mb-plan">0</span></div><div class="mat-tasks" id="mt-plan"></div></div>
+    <div class="mat-quad q-delegate"><div class="mat-header"><span class="mat-emoji">👤</span><div><div class="mat-title">DÉLÉGUER</div><div class="mat-sub">Urgent · Pas important</div></div><span class="mat-badge" id="mb-delegate">0</span></div><div class="mat-tasks" id="mt-delegate"></div></div>
+    <div class="mat-quad q-eliminate"><div class="mat-header"><span class="mat-emoji">🗑️</span><div><div class="mat-title">ÉLIMINER</div><div class="mat-sub">Pas urgent · Pas important</div></div><span class="mat-badge" id="mb-eliminate">0</span></div><div class="mat-tasks" id="mt-eliminate"></div></div>
   </div>
 </div>
 
-<!-- EDIT MODAL -->
+<div class="view-section" id="vs-countdown"><div id="cd-content"></div></div>
+
 <div class="modal-overlay" id="edit-modal">
   <div class="modal">
     <h3>✏️ Modifier la tâche</h3>
     <input type="text" id="edit-input" placeholder="Nom de la tâche…"/>
     <div class="prio-label">Priorité</div>
     <div class="prio-grid" id="edit-prio-grid">
-      <button class="prio-btn" data-q="do"        ><div class="pl">✅ Urgent &amp; Important</div><div class="pd">→ FAIRE</div></button>
-      <button class="prio-btn" data-q="plan"      ><div class="pl">📅 Important, pas urgent</div><div class="pd">→ PLANIFIER</div></button>
-      <button class="prio-btn" data-q="delegate"  ><div class="pl">👤 Urgent, pas important</div><div class="pd">→ DÉLÉGUER</div></button>
-      <button class="prio-btn" data-q="eliminate" ><div class="pl">🗑️ Ni urgent, ni important</div><div class="pd">→ ÉLIMINER</div></button>
+      <button class="prio-btn" data-q="do"><div class="pl">✅ Urgent &amp; Important</div><div class="pd">→ FAIRE</div></button>
+      <button class="prio-btn" data-q="plan"><div class="pl">📅 Important, pas urgent</div><div class="pd">→ PLANIFIER</div></button>
+      <button class="prio-btn" data-q="delegate"><div class="pl">👤 Urgent, pas important</div><div class="pd">→ DÉLÉGUER</div></button>
+      <button class="prio-btn" data-q="eliminate"><div class="pl">🗑️ Ni urgent, ni important</div><div class="pd">→ ÉLIMINER</div></button>
     </div>
     <div class="modal-btns">
       <button class="btn-modal-cancel" id="edit-cancel">Annuler</button>
-      <button class="btn-modal-save"   id="edit-save">Enregistrer</button>
+      <button class="btn-modal-save" id="edit-save">Enregistrer</button>
     </div>
   </div>
 </div>
 
-<!-- TIMEBOX DONE BANNER -->
 <div class="tb-banner" id="tb-banner">
   <div class="tb-banner-box">
     <h2>⏱️ Temps écoulé !</h2>
@@ -310,310 +310,66 @@
 
 <script>
 'use strict';
-const SK = 'eisenhower_v3';
-let tasks = [], uid = 1, selQ = 'do', completedCount = 0;
-let activeTimer = null;
-let editId = null, editQ = 'do';
-
-const QCOLORS  = {do:'#e05c7a', plan:'#3dbfa8', delegate:'#f5a623', eliminate:'#9b8fd4'};
-const QLABELS  = {do:'Urgent & Important', plan:'Important · Pas urgent', delegate:'Urgent · Pas important', eliminate:'Ni urgent · Ni important'};
-const QSHORT   = {do:'✅ Faire', plan:'📅 Planifier', delegate:'👤 Déléguer', eliminate:'🗑️ Éliminer'};
-const VIEWS    = {saisie:'vs-saisie', toutes:'vs-toutes', faire:'vs-faire', planifier:'vs-planifier', deleguer:'vs-deleguer', eliminer:'vs-eliminer', matrix:'vs-matrix'};
-const TABS     = {saisie:'tab-saisie', toutes:'tab-toutes', faire:'tab-faire', planifier:'tab-planifier', deleguer:'tab-deleguer', eliminer:'tab-eliminer', matrix:'tab-matrix'};
-const sortables = {};
-
-function load() {
-  try {
-    const d = JSON.parse(localStorage.getItem(SK) || '{}');
-    const raw = d.tasks || [];
-    const seen = new Set();
-    tasks = raw.filter(t => { if (!t || !t.id || seen.has(t.id)) return false; seen.add(t.id); return true; });
-    uid = tasks.length ? Math.max(...tasks.map(t => t.id)) + 1 : 1;
-    completedCount = parseInt(localStorage.getItem(SK + '_done') || '0');
-  } catch(e) { tasks = []; uid = 1; }
-}
-
-function save() {
-  try {
-    localStorage.setItem(SK, JSON.stringify({ tasks, uid }));
-    document.getElementById('save-badge').classList.add('show');
-    setTimeout(() => document.getElementById('save-badge').classList.remove('show'), 1800);
-  } catch(e) {}
-}
-
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2000);
-}
-
-function switchView(v) {
-  Object.values(VIEWS).forEach(id => document.getElementById(id).classList.remove('active'));
-  Object.values(TABS).forEach(id => document.getElementById(id).classList.remove('active'));
-  document.getElementById(VIEWS[v]).classList.add('active');
-  document.getElementById(TABS[v]).classList.add('active');
-}
-
-function addTask() {
-  const inp = document.getElementById('task-input');
-  const text = inp.value.trim(); if (!text) return;
-  tasks.push({ id: uid++, text, quadrant: selQ, tbMins: 0 });
-  inp.value = ''; save(); render();
-}
-
-function removeTask(id) {
-  const task = tasks.find(t => t.id === id); if (!task) return;
-  if (!confirm('Supprimer :\n"' + task.text + '" ?')) return;
-  tasks = tasks.filter(t => t.id !== id);
-  save(); render();
-}
-
-function markDone(id) {
-  const task = tasks.find(t => t.id === id); if (!task) return;
-  if (!confirm('Marquer comme réalisée et supprimer :\n"' + task.text + '" ?')) return;
-  completedCount++;
-  localStorage.setItem(SK + '_done', completedCount);
-  tasks = tasks.filter(t => t.id !== id);
-  save(); render();
-}
-
-function changeQ(id, newQ) {
-  tasks = tasks.map(t => t.id === id ? { ...t, quadrant: newQ } : t);
-  save(); render();
-  const names = {do:'Faire', plan:'Planifier', delegate:'Déléguer', eliminate:'Éliminer'};
-  toast('✓ Déplacée vers "' + names[newQ] + '"');
-  const tabMap = {do:'tab-faire', plan:'tab-planifier', delegate:'tab-deleguer', eliminate:'tab-eliminer'};
-  const tab = document.getElementById(tabMap[newQ]);
-  if (tab) { tab.style.boxShadow = '0 0 0 2px #f5a623'; setTimeout(() => tab.style.boxShadow = '', 2000); }
-}
-
-function setTbMins(id, val) {
-  const mins = parseInt(val) || 0;
-  tasks = tasks.map(t => t.id === id ? { ...t, tbMins: mins } : t);
-  save();
-}
-
-function fmtTime(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
-
-function startTimer(id) {
-  const task = tasks.find(t => t.id === id); if (!task) return;
-  const inp = document.getElementById('tb-inp-' + id);
-  const mins = task.tbMins || (inp ? parseInt(inp.value) || 0 : 0);
-  if (!mins) { alert('Saisissez une durée en minutes.'); return; }
-  tasks = tasks.map(t => t.id === id ? { ...t, tbMins: mins } : t);
-  save();
-  if (activeTimer) clearInterval(activeTimer.interval);
-  activeTimer = { id, remaining: mins * 60, interval: null };
-  activeTimer.interval = setInterval(() => {
-    activeTimer.remaining--;
-    const cd = document.getElementById('tb-cd-' + id);
-    if (cd) { cd.textContent = fmtTime(activeTimer.remaining); if (activeTimer.remaining <= 60) cd.classList.add('urgent'); }
-    if (activeTimer.remaining <= 0) {
-      clearInterval(activeTimer.interval);
-      const t = activeTimer; activeTimer = null;
-      document.getElementById('tb-banner-msg').innerHTML = '<strong style="color:#f5a623">' + esc(task.text) + '</strong><br>' + mins + ' minutes écoulées !';
-      document.getElementById('tb-banner').classList.add('show');
-      render();
-    }
-  }, 1000);
-  render();
-}
-
-function stopTimer() {
-  if (activeTimer) { clearInterval(activeTimer.interval); activeTimer = null; }
-  render();
-}
-
-function openEdit(id) {
-  const task = tasks.find(t => t.id === id); if (!task) return;
-  editId = id; editQ = task.quadrant;
-  document.getElementById('edit-input').value = task.text;
-  document.querySelectorAll('#edit-prio-grid .prio-btn').forEach(b => {
-    b.className = 'prio-btn';
-    if (b.dataset.q === task.quadrant) b.classList.add('s-' + task.quadrant);
-  });
-  document.getElementById('edit-modal').classList.add('open');
-  setTimeout(() => document.getElementById('edit-input').focus(), 80);
-}
-
-function saveEdit() {
-  const text = document.getElementById('edit-input').value.trim(); if (!text) return;
-  tasks = tasks.map(t => t.id === editId ? { ...t, text, quadrant: editQ } : t);
-  document.getElementById('edit-modal').classList.remove('open');
-  editId = null; save(); render();
-}
-
-function syncOrder(el, quadrant) {
-  const ids = [...el.querySelectorAll('[data-id],[data-mid]')].map(e => parseInt(e.dataset.id || e.dataset.mid));
-  const reordered = ids.map(id => tasks.find(t => t.id === id)).filter(Boolean);
-  const others = tasks.filter(t => t.quadrant !== quadrant);
-  const seen = new Set();
-  tasks = [...others, ...reordered].filter(t => { if (seen.has(t.id)) return false; seen.add(t.id); return true; });
-  save(); render();
-}
-
-function initSortable(listId, quadrant) {
-  if (sortables[listId]) sortables[listId].destroy();
-  const el = document.getElementById(listId); if (!el) return;
-  sortables[listId] = Sortable.create(el, {
-    handle: '.drag-handle', animation: 150,
-    ghostClass: 'sortable-ghost', chosenClass: 'sortable-chosen',
-    onEnd() { syncOrder(el, quadrant); }
-  });
-}
-
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function emptyMsg(msg) { return '<div style="text-align:center;color:#2e3d5a;font-size:.82rem;padding:1.5rem;">' + msg + '</div>'; }
-
-function tbRow(t) {
-  const isRunning = activeTimer && activeTimer.id === t.id;
-  const cdVal = isRunning ? fmtTime(activeTimer.remaining) : '';
-  const mins = t.tbMins || '';
-  return '<div class="tb-row">' +
-    '<span class="tb-label-txt">⏱ Temps alloué</span>' +
-    '<input class="tb-input" type="number" min="1" max="240" placeholder="min" value="' + mins + '" id="tb-inp-' + t.id + '" onchange="setTbMins(' + t.id + ',this.value)"/>' +
-    '<span class="tb-unit">min</span>' +
-    (isRunning
-      ? '<span class="tb-countdown' + (activeTimer.remaining <= 60 ? ' urgent' : '') + '" id="tb-cd-' + t.id + '">' + cdVal + '</span>' +
-        '<button class="tb-stop" onclick="stopTimer()">⏹ Stop</button>'
-      : '<button class="tb-start" onclick="startTimer(' + t.id + ')">▶ Lancer</button>'
-    ) +
-  '</div>';
-}
-
-function quadrantTaskRow(t) {
-  return '<div class="task-row" data-id="' + t.id + '">' +
-    '<span class="drag-handle">⠿</span>' +
-    '<div class="big-check" onclick="markDone(' + t.id + ')" title="Réalisée"></div>' +
-    '<span class="task-name">' + esc(t.text) + '</span>' +
-    '<span class="status-badge">' + QLABELS[t.quadrant] + '</span>' +
-    '<button class="btn-icon" onclick="openEdit(' + t.id + ')" title="Modifier">✏️</button>' +
-    '<button class="btn-icon btn-del" onclick="removeTask(' + t.id + ')" title="Supprimer">✕</button>' +
-  '</div>' + tbRow(t);
-}
-
-function allTaskRow(t) {
-  const qc = QCOLORS[t.quadrant];
-  return '<div style="border-left:4px solid ' + qc + ';border-bottom:1px solid #1e2d4a;">' +
-    '<div class="task-row" data-id="' + t.id + '" style="border-bottom:none;">' +
-      '<div class="big-check" onclick="markDone(' + t.id + ')" title="Réalisée"></div>' +
-      '<span class="task-name">' + esc(t.text) + '</span>' +
-      '<select class="all-q-select" onchange="changeQ(' + t.id + ',this.value)" style="color:' + qc + ';border-color:' + qc + '55;">' +
-        '<option value="do"'        + (t.quadrant==='do'       ?'selected':'') + '>✅ Urgent & Imp.</option>' +
-        '<option value="plan"'      + (t.quadrant==='plan'     ?'selected':'') + '>📅 Imp. pas urgent</option>' +
-        '<option value="delegate"'  + (t.quadrant==='delegate' ?'selected':'') + '>👤 Urgent pas imp.</option>' +
-        '<option value="eliminate"' + (t.quadrant==='eliminate'?'selected':'') + '>🗑️ Ni urgent ni imp.</option>' +
-      '</select>' +
-      '<button class="btn-icon" onclick="openEdit(' + t.id + ')" title="Modifier">✏️</button>' +
-      '<button class="btn-icon btn-del" onclick="removeTask(' + t.id + ')" title="Supprimer">✕</button>' +
-    '</div>' + tbRow(t) +
-  '</div>';
-}
-
-function render() {
-  const n = tasks.length;
-  const pct = (completedCount + n) === 0 ? 0 : Math.round(completedCount / (completedCount + n) * 100);
-  document.getElementById('prog-pct').textContent = pct + '%';
-  document.getElementById('prog-fill').style.width = pct + '%';
-  document.getElementById('tb-all').textContent = n;
-  document.getElementById('sc-all').textContent = n + ' tâche' + (n !== 1 ? 's' : '');
-  const allEl = document.getElementById('list-all');
-  allEl.innerHTML = n === 0 ? emptyMsg('Aucune tâche. Allez dans "Saisie" pour en ajouter.') : tasks.map(allTaskRow).join('');
-  ['do','plan','delegate','eliminate'].forEach(q => {
-    const qt = tasks.filter(t => t.quadrant === q);
-    document.getElementById('tb-' + q).textContent = qt.length;
-    document.getElementById('sc-' + q).textContent = qt.length + ' tâche' + (qt.length !== 1 ? 's' : '');
-    document.getElementById('mb-' + q).textContent = qt.length;
-    const listEl = document.getElementById('list-' + q);
-    listEl.innerHTML = qt.length === 0 ? emptyMsg('Aucune tâche dans ce quadrant.') : qt.map(quadrantTaskRow).join('');
-    initSortable('list-' + q, q);
-    const mtEl = document.getElementById('mt-' + q);
-    mtEl.innerHTML = qt.length === 0 ? '<div class="mat-empty">—</div>' :
-      qt.map(t => '<div class="mat-task" data-mid="' + t.id + '">' +
-        '<span class="drag-handle" style="font-size:.8rem">⠿</span>' +
-        '<div class="mat-check" onclick="markDone(' + t.id + ')" title="Réalisée">○</div>' +
-        '<span class="mat-task-text">' + esc(t.text) + '</span>' +
-      '</div>').join('');
-    initSortable('mt-' + q, q);
-  });
-}
-
-// Tabs
-document.getElementById('tab-saisie').onclick    = () => switchView('saisie');
-document.getElementById('tab-toutes').onclick    = () => switchView('toutes');
-document.getElementById('tab-faire').onclick     = () => switchView('faire');
-document.getElementById('tab-planifier').onclick = () => switchView('planifier');
-document.getElementById('tab-deleguer').onclick  = () => switchView('deleguer');
-document.getElementById('tab-eliminer').onclick  = () => switchView('eliminer');
-document.getElementById('tab-matrix').onclick    = () => switchView('matrix');
-
-document.getElementById('btn-add').onclick = addTask;
-document.getElementById('task-input').onkeydown = e => { if (e.key === 'Enter') addTask(); };
-document.getElementById('btn-add-from-all').onclick      = () => switchView('saisie');
-document.getElementById('btn-add-from-do').onclick       = () => switchView('saisie');
-document.getElementById('btn-add-from-plan').onclick     = () => switchView('saisie');
-document.getElementById('btn-add-from-delegate').onclick = () => switchView('saisie');
-document.getElementById('btn-add-from-eliminate').onclick= () => switchView('saisie');
-
-let binUrgent = true, binImportant = true;
-
-function updateBinaryResult() {
-  if (binUrgent && binImportant)       selQ = 'do';
-  else if (!binUrgent && binImportant) selQ = 'plan';
-  else if (binUrgent && !binImportant) selQ = 'delegate';
-  else                                  selQ = 'eliminate';
-  const configs = {
-    do:       { color:'#e05c7a', bg:'#2a1020', label:'✅ FAIRE',     desc:'Urgent & Important' },
-    plan:     { color:'#3dbfa8', bg:'#0d1f20', label:'📅 PLANIFIER', desc:'Important · Pas urgent' },
-    delegate: { color:'#f5a623', bg:'#251d08', label:'👤 DÉLÉGUER',  desc:'Urgent · Pas important' },
-    eliminate:{ color:'#9b8fd4', bg:'#1a1530', label:'🗑️ ÉLIMINER', desc:'Ni urgent · Ni important' },
-  };
-  const cfg = configs[selQ];
-  const box = document.getElementById('binary-result-content');
-  box.style.borderColor = cfg.color;
-  box.style.background  = cfg.bg;
-  box.querySelector('.binary-result-label').style.color = cfg.color;
-  box.querySelector('.binary-result-label').textContent = cfg.label;
-  box.querySelector('.binary-result-desc').textContent  = cfg.desc;
-}
-
-document.querySelectorAll('.bin-btn').forEach(btn => {
-  btn.onclick = () => {
-    const q = btn.dataset.q;
-    document.querySelectorAll('.bin-btn[data-q="' + q + '"]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    if (q === 'urgent')    binUrgent    = btn.dataset.v === 'yes';
-    if (q === 'important') binImportant = btn.dataset.v === 'yes';
-    updateBinaryResult();
-  };
-});
-
-document.getElementById('btn-reset').onclick = () => {
-  if (!confirm('Effacer TOUTES les données et repartir de zéro ?')) return;
-  localStorage.removeItem(SK); localStorage.removeItem(SK + '_done');
-  tasks = []; uid = 1; completedCount = 0;
-  save(); render();
-};
-document.getElementById('btn-new').onclick = () => {
-  if (!confirm('Remettre à zéro toutes les tâches ?')) return;
-  tasks = []; uid = 1; completedCount = 0;
-  localStorage.removeItem(SK + '_done');
-  save(); render();
-};
-
-document.getElementById('edit-cancel').onclick = () => { document.getElementById('edit-modal').classList.remove('open'); editId = null; };
-document.getElementById('edit-save').onclick = saveEdit;
-document.getElementById('edit-input').onkeydown = e => { if (e.key === 'Enter') saveEdit(); };
-document.getElementById('edit-modal').onclick = e => { if (e.target === document.getElementById('edit-modal')) { document.getElementById('edit-modal').classList.remove('open'); editId = null; } };
-document.getElementById('edit-prio-grid').onclick = e => {
-  const btn = e.target.closest('[data-q]'); if (!btn) return;
-  document.querySelectorAll('#edit-prio-grid .prio-btn').forEach(b => b.className = 'prio-btn');
-  editQ = btn.dataset.q; btn.classList.add('s-' + editQ);
-};
-
-document.getElementById('tb-banner-close').onclick = () => document.getElementById('tb-banner').classList.remove('show');
-
-load(); render();
+const SK='eisenhower_v3';
+let tasks=[],uid=1,selQ='do',completedCount=0,activeTimer=null,editId=null,editQ='do';
+const QCOLORS={do:'#e05c7a',plan:'#3dbfa8',delegate:'#f5a623',eliminate:'#9b8fd4'};
+const QLABELS={do:'Urgent & Important',plan:'Important · Pas urgent',delegate:'Urgent · Pas important',eliminate:'Ni urgent · Ni important'};
+const VIEWS={saisie:'vs-saisie',toutes:'vs-toutes',faire:'vs-faire',planifier:'vs-planifier',deleguer:'vs-deleguer',eliminer:'vs-eliminer',matrix:'vs-matrix',countdown:'vs-countdown'};
+const TABS={saisie:'tab-saisie',toutes:'tab-toutes',faire:'tab-faire',planifier:'tab-planifier',deleguer:'tab-deleguer',eliminer:'tab-eliminer',matrix:'tab-matrix',countdown:'tab-countdown'};
+const sortables={};
+function load(){try{const d=JSON.parse(localStorage.getItem(SK)||'{}');const raw=d.tasks||[];const seen=new Set();tasks=raw.filter(t=>{if(!t||!t.id||seen.has(t.id))return false;seen.add(t.id);return true;});uid=tasks.length?Math.max(...tasks.map(t=>t.id))+1:1;completedCount=parseInt(localStorage.getItem(SK+'_done')||'0');}catch(e){tasks=[];uid=1;}}
+function save(){try{localStorage.setItem(SK,JSON.stringify({tasks,uid}));document.getElementById('save-badge').classList.add('show');setTimeout(()=>document.getElementById('save-badge').classList.remove('show'),1800);}catch(e){}}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2000);}
+function switchView(v){Object.values(VIEWS).forEach(id=>document.getElementById(id).classList.remove('active'));Object.values(TABS).forEach(id=>document.getElementById(id).classList.remove('active'));document.getElementById(VIEWS[v]).classList.add('active');document.getElementById(TABS[v]).classList.add('active');}
+function addTask(){const inp=document.getElementById('task-input');const text=inp.value.trim();if(!text)return;tasks.push({id:uid++,text,quadrant:selQ,tbMins:0,deadline:''});inp.value='';save();render();}
+function removeTask(id){const task=tasks.find(t=>t.id===id);if(!task)return;if(!confirm('Supprimer :\n"'+task.text+'" ?'))return;tasks=tasks.filter(t=>t.id!==id);save();render();}
+function markDone(id){const task=tasks.find(t=>t.id===id);if(!task)return;if(!confirm('Marquer comme réalisée et supprimer :\n"'+task.text+'" ?'))return;completedCount++;localStorage.setItem(SK+'_done',completedCount);tasks=tasks.filter(t=>t.id!==id);save();render();}
+function changeQ(id,newQ){tasks=tasks.map(t=>t.id===id?{...t,quadrant:newQ}:t);save();render();const names={do:'Faire',plan:'Planifier',delegate:'Déléguer',eliminate:'Éliminer'};toast('✓ Déplacée vers "'+names[newQ]+'"');const tabMap={do:'tab-faire',plan:'tab-planifier',delegate:'tab-deleguer',eliminate:'tab-eliminer'};const tab=document.getElementById(tabMap[newQ]);if(tab){tab.style.boxShadow='0 0 0 2px #f5a623';setTimeout(()=>tab.style.boxShadow='',2000);}}
+function setTbMins(id,val){const mins=parseInt(val)||0;tasks=tasks.map(t=>t.id===id?{...t,tbMins:mins}:t);save();}
+function setDeadline(id,val){tasks=tasks.map(t=>t.id===id?{...t,deadline:val}:t);save();render();}
+function deadlineBadge(deadline){if(!deadline)return'';const today=new Date();today.setHours(0,0,0,0);const dl=new Date(deadline);dl.setHours(0,0,0,0);const diff=Math.round((dl-today)/86400000);const dateStr=dl.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});if(diff<0)return'<span class="dl-badge late">⚠ Dépassée · '+dateStr+'</span>';if(diff===0)return'<span class="dl-badge soon">🔴 Aujourd\'hui · '+dateStr+'</span>';if(diff<=7)return'<span class="dl-badge soon">⚡ J-'+diff+' · '+dateStr+'</span>';return'<span class="dl-badge ok">📅 J-'+diff+' · '+dateStr+'</span>';}
+function fmtTime(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function startTimer(id){const task=tasks.find(t=>t.id===id);if(!task)return;const inp=document.getElementById('tb-inp-'+id);const mins=task.tbMins||(inp?parseInt(inp.value)||0:0);if(!mins){alert('Saisissez une durée en minutes.');return;}tasks=tasks.map(t=>t.id===id?{...t,tbMins:mins}:t);save();if(activeTimer)clearInterval(activeTimer.interval);activeTimer={id,remaining:mins*60,interval:null};activeTimer.interval=setInterval(()=>{activeTimer.remaining--;const cd=document.getElementById('tb-cd-'+id);if(cd){cd.textContent=fmtTime(activeTimer.remaining);if(activeTimer.remaining<=60)cd.classList.add('urgent');}if(activeTimer.remaining<=0){clearInterval(activeTimer.interval);const t=activeTimer;activeTimer=null;document.getElementById('tb-banner-msg').innerHTML='<strong style="color:#f5a623">'+esc(task.text)+'</strong><br>'+mins+' minutes écoulées !';document.getElementById('tb-banner').classList.add('show');render();}},1000);render();}
+function stopTimer(){if(activeTimer){clearInterval(activeTimer.interval);activeTimer=null;}render();}
+function openEdit(id){const task=tasks.find(t=>t.id===id);if(!task)return;editId=id;editQ=task.quadrant;document.getElementById('edit-input').value=task.text;document.querySelectorAll('#edit-prio-grid .prio-btn').forEach(b=>{b.className='prio-btn';if(b.dataset.q===task.quadrant)b.classList.add('s-'+task.quadrant);});document.getElementById('edit-modal').classList.add('open');setTimeout(()=>document.getElementById('edit-input').focus(),80);}
+function saveEdit(){const text=document.getElementById('edit-input').value.trim();if(!text)return;tasks=tasks.map(t=>t.id===editId?{...t,text,quadrant:editQ}:t);document.getElementById('edit-modal').classList.remove('open');editId=null;save();render();}
+function syncOrder(el,quadrant){const ids=[...el.querySelectorAll('[data-id],[data-mid]')].map(e=>parseInt(e.dataset.id||e.dataset.mid));const reordered=ids.map(id=>tasks.find(t=>t.id===id)).filter(Boolean);const others=tasks.filter(t=>t.quadrant!==quadrant);const seen=new Set();tasks=[...others,...reordered].filter(t=>{if(seen.has(t.id))return false;seen.add(t.id);return true;});save();render();}
+function initSortable(listId,quadrant){if(sortables[listId])sortables[listId].destroy();const el=document.getElementById(listId);if(!el)return;sortables[listId]=Sortable.create(el,{handle:'.drag-handle',animation:150,ghostClass:'sortable-ghost',chosenClass:'sortable-chosen',onEnd(){syncOrder(el,quadrant);}});}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function emptyMsg(msg){return'<div style="text-align:center;color:#2e3d5a;font-size:.82rem;padding:1.5rem;">'+msg+'</div>';}
+function tbRow(t){const isRunning=activeTimer&&activeTimer.id===t.id;const cdVal=isRunning?fmtTime(activeTimer.remaining):'';const mins=t.tbMins||'';return'<div class="tb-row"><span class="tb-label-txt">⏱ Time box</span><input class="tb-input" type="number" min="1" max="240" placeholder="min" value="'+mins+'" id="tb-inp-'+t.id+'" onchange="setTbMins('+t.id+',this.value)"/><span class="tb-unit">min</span>'+(isRunning?'<span class="tb-countdown'+(activeTimer.remaining<=60?' urgent':'')+'" id="tb-cd-'+t.id+'">'+cdVal+'</span><button class="tb-stop" onclick="stopTimer()">⏹ Stop</button>':'<button class="tb-start" onclick="startTimer('+t.id+')">▶ Lancer</button>')+'</div>';}
+function dlRow(t){const badge=deadlineBadge(t.deadline);return'<div class="dl-row"><span class="dl-label-txt">📆 Au plus tard</span><input class="dl-input" type="date" value="'+(t.deadline||'')+'" id="dl-inp-'+t.id+'" onchange="setDeadline('+t.id+',this.value)"/>'+(badge?badge:'')+'</div>';}
+function quadrantTaskRow(t){return'<div class="task-row" data-id="'+t.id+'"><span class="drag-handle">⠿</span><div class="big-check" onclick="markDone('+t.id+')" title="Réalisée"></div><span class="task-name">'+esc(t.text)+'</span><span class="status-badge">'+QLABELS[t.quadrant]+'</span><button class="btn-icon" onclick="openEdit('+t.id+')" title="Modifier">✏️</button><button class="btn-icon btn-del" onclick="removeTask('+t.id+')" title="Supprimer">✕</button></div>'+tbRow(t)+dlRow(t);}
+function allTaskRow(t){const qc=QCOLORS[t.quadrant];return'<div style="border-left:4px solid '+qc+';border-bottom:1px solid #1e2d4a;"><div class="task-row" data-id="'+t.id+'" style="border-bottom:none;"><div class="big-check" onclick="markDone('+t.id+')" title="Réalisée"></div><span class="task-name">'+esc(t.text)+'</span><select class="all-q-select" onchange="changeQ('+t.id+',this.value)" style="color:'+qc+';border-color:'+qc+'55;"><option value="do"'+(t.quadrant==='do'?'selected':'')+'>✅ Urgent & Imp.</option><option value="plan"'+(t.quadrant==='plan'?'selected':'')+'>📅 Imp. pas urgent</option><option value="delegate"'+(t.quadrant==='delegate'?'selected':'')+'>👤 Urgent pas imp.</option><option value="eliminate"'+(t.quadrant==='eliminate'?'selected':'')+'>🗑️ Ni urgent ni imp.</option></select><button class="btn-icon" onclick="openEdit('+t.id+')" title="Modifier">✏️</button><button class="btn-icon btn-del" onclick="removeTask('+t.id+')" title="Supprimer">✕</button></div>'+tbRow(t)+dlRow(t)+'</div>';}
+function renderCountdown(){const today=new Date();today.setHours(0,0,0,0);const withDl=tasks.filter(t=>t.deadline).map(t=>{const dl=new Date(t.deadline);dl.setHours(0,0,0,0);const diff=Math.round((dl-today)/86400000);return{...t,diff,dl};}).sort((a,b)=>a.diff-b.diff);document.getElementById('tb-countdown').textContent=withDl.length;const el=document.getElementById('cd-content');if(withDl.length===0){el.innerHTML='<div class="cd-empty">📆 Aucune date limite définie.<br>Ajoutez un "Au plus tard" sur vos tâches.</div>';return;}const upcoming=withDl.filter(t=>t.diff>=0);const past=withDl.filter(t=>t.diff<0);function cardClass(diff){if(diff<0)return'cd-late';if(diff===0)return'cd-today';if(diff<=7)return'cd-urgent';if(diff<=30)return'cd-soon';return'cd-ok';}function cardHtml(t){const dateStr=t.dl.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'long',year:'numeric'});const num=Math.abs(t.diff);const unit=num<=1?'jour':'jours';const numDisplay=t.diff===0?"Auj.":num;const unitDisplay=t.diff===0?'':unit;const qLabel={do:'✅ Faire',plan:'📅 Planifier',delegate:'👤 Déléguer',eliminate:'🗑️ Éliminer'}[t.quadrant];return'<div class="cd-card '+cardClass(t.diff)+'"><div class="cd-card-left"><div class="cd-card-name">'+esc(t.text)+'</div><div class="cd-card-date">'+dateStr+' · '+qLabel+'</div></div><div class="cd-card-right"><div class="cd-card-num">'+numDisplay+'</div><div class="cd-card-unit">'+unitDisplay+(t.diff<0?' passés':'')+'</div></div></div>';}let html='<div class="cd-wrap">';if(upcoming.length){html+='<div class="cd-title">À venir</div>';html+=upcoming.map(cardHtml).join('');}if(past.length){html+='<div class="cd-title" style="color:#e05c7a;">⚠ Passées</div>';html+=past.map(cardHtml).join('');}html+='</div>';el.innerHTML=html;}
+function render(){const n=tasks.length;const pct=(completedCount+n)===0?0:Math.round(completedCount/(completedCount+n)*100);document.getElementById('prog-pct').textContent=pct+'%';document.getElementById('prog-fill').style.width=pct+'%';document.getElementById('tb-all').textContent=n;document.getElementById('sc-all').textContent=n+' tâche'+(n!==1?'s':'');const allEl=document.getElementById('list-all');allEl.innerHTML=n===0?emptyMsg('Aucune tâche. Allez dans "Saisie" pour en ajouter.'):tasks.map(allTaskRow).join('');['do','plan','delegate','eliminate'].forEach(q=>{const qt=tasks.filter(t=>t.quadrant===q);document.getElementById('tb-'+q).textContent=qt.length;document.getElementById('sc-'+q).textContent=qt.length+' tâche'+(qt.length!==1?'s':'');document.getElementById('mb-'+q).textContent=qt.length;const listEl=document.getElementById('list-'+q);listEl.innerHTML=qt.length===0?emptyMsg('Aucune tâche dans ce quadrant.'):qt.map(quadrantTaskRow).join('');initSortable('list-'+q,q);const mtEl=document.getElementById('mt-'+q);mtEl.innerHTML=qt.length===0?'<div class="mat-empty">—</div>':qt.map(t=>'<div class="mat-task" data-mid="'+t.id+'"><span class="drag-handle" style="font-size:.8rem">⠿</span><div class="mat-check" onclick="markDone('+t.id+')" title="Réalisée">○</div><span class="mat-task-text">'+esc(t.text)+'</span></div>').join('');initSortable('mt-'+q,q);});renderCountdown();}
+document.getElementById('tab-saisie').onclick=()=>switchView('saisie');
+document.getElementById('tab-toutes').onclick=()=>switchView('toutes');
+document.getElementById('tab-faire').onclick=()=>switchView('faire');
+document.getElementById('tab-planifier').onclick=()=>switchView('planifier');
+document.getElementById('tab-deleguer').onclick=()=>switchView('deleguer');
+document.getElementById('tab-eliminer').onclick=()=>switchView('eliminer');
+document.getElementById('tab-matrix').onclick=()=>switchView('matrix');
+document.getElementById('tab-countdown').onclick=()=>switchView('countdown');
+document.getElementById('btn-add').onclick=addTask;
+document.getElementById('task-input').onkeydown=e=>{if(e.key==='Enter')addTask();};
+document.getElementById('btn-add-from-all').onclick=()=>switchView('saisie');
+document.getElementById('btn-add-from-do').onclick=()=>switchView('saisie');
+document.getElementById('btn-add-from-plan').onclick=()=>switchView('saisie');
+document.getElementById('btn-add-from-delegate').onclick=()=>switchView('saisie');
+document.getElementById('btn-add-from-eliminate').onclick=()=>switchView('saisie');
+let binUrgent=true,binImportant=true;
+function updateBinaryResult(){if(binUrgent&&binImportant)selQ='do';else if(!binUrgent&&binImportant)selQ='plan';else if(binUrgent&&!binImportant)selQ='delegate';else selQ='eliminate';const configs={do:{color:'#e05c7a',bg:'#2a1020',label:'✅ FAIRE',desc:'Urgent & Important'},plan:{color:'#3dbfa8',bg:'#0d1f20',label:'📅 PLANIFIER',desc:'Important · Pas urgent'},delegate:{color:'#f5a623',bg:'#251d08',label:'👤 DÉLÉGUER',desc:'Urgent · Pas important'},eliminate:{color:'#9b8fd4',bg:'#1a1530',label:'🗑️ ÉLIMINER',desc:'Ni urgent · Ni important'}};const cfg=configs[selQ];const box=document.getElementById('binary-result-content');box.style.borderColor=cfg.color;box.style.background=cfg.bg;box.querySelector('.binary-result-label').style.color=cfg.color;box.querySelector('.binary-result-label').textContent=cfg.label;box.querySelector('.binary-result-desc').textContent=cfg.desc;}
+document.querySelectorAll('.bin-btn').forEach(btn=>{btn.onclick=()=>{const q=btn.dataset.q;document.querySelectorAll('.bin-btn[data-q="'+q+'"]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(q==='urgent')binUrgent=btn.dataset.v==='yes';if(q==='important')binImportant=btn.dataset.v==='yes';updateBinaryResult();};});
+document.getElementById('btn-reset').onclick=()=>{if(!confirm('Effacer TOUTES les données et repartir de zéro ?'))return;localStorage.removeItem(SK);localStorage.removeItem(SK+'_done');tasks=[];uid=1;completedCount=0;save();render();};
+document.getElementById('btn-new').onclick=()=>{if(!confirm('Remettre à zéro toutes les tâches ?'))return;tasks=[];uid=1;completedCount=0;localStorage.removeItem(SK+'_done');save();render();};
+document.getElementById('edit-cancel').onclick=()=>{document.getElementById('edit-modal').classList.remove('open');editId=null;};
+document.getElementById('edit-save').onclick=saveEdit;
+document.getElementById('edit-input').onkeydown=e=>{if(e.key==='Enter')saveEdit();};
+document.getElementById('edit-modal').onclick=e=>{if(e.target===document.getElementById('edit-modal')){document.getElementById('edit-modal').classList.remove('open');editId=null;}};
+document.getElementById('edit-prio-grid').onclick=e=>{const btn=e.target.closest('[data-q]');if(!btn)return;document.querySelectorAll('#edit-prio-grid .prio-btn').forEach(b=>b.className='prio-btn');editQ=btn.dataset.q;btn.classList.add('s-'+editQ);};
+document.getElementById('tb-banner-close').onclick=()=>document.getElementById('tb-banner').classList.remove('show');
+load();render();
 </script>
 
 <script>
@@ -629,8 +385,7 @@ if ("serviceWorker" in navigator) {
             }
           });
         });
-      })
-      .catch(e => console.warn("SW:", e));
+      }).catch(e => console.warn("SW:", e));
   });
 }
 function doUpdate() {
@@ -640,6 +395,5 @@ function doUpdate() {
   });
 }
 </script>
-
 </body>
 </html>
