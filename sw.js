@@ -1,4 +1,4 @@
-const CACHE = 'eisenhower-v4';
+const CACHE = 'eisenhower-v5';
 const ASSETS = [
   '/Eisenhower_PWA/',
   '/Eisenhower_PWA/index.html',
