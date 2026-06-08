@@ -1,4 +1,4 @@
-const CACHE = 'eisenhower-v1';
+const CACHE = 'eisenhower-v2';
 const ASSETS = [
   '/Eisenhower_PWA/',
   '/Eisenhower_PWA/index.html',
@@ -36,4 +36,9 @@ self.addEventListener('fetch', e => {
       }).catch(() => caches.match('/Eisenhower_PWA/index.html'));
     })
   );
+});
+
+// Notifier l'appli qu'une nouvelle version est disponible
+self.addEventListener('message', e => {
+  if (e.data === 'SKIP_WAITING') self.skipWaiting();
 });
