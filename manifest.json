@@ -1,9 +1,9 @@
 {
-  "name": "Matrice Eisenhower",
+  "name": "Eisenhower Pro",
   "short_name": "Eisenhower",
-  "description": "Matrice de priorisation des tâches",
-  "start_url": "/Eisenhower_PWA/",
-  "scope": "/Eisenhower_PWA/",
+  "description": "Matrice de priorisation avec gestion des RDV",
+  "start_url": "/Eisenhower_Pro/",
+  "scope": "/Eisenhower_Pro/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0d1321",
